@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>co_cheickby_v1 – Admin</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="admin-header">
+        <div>
+          <div class="title">Dashboard Admin</div>
+          <div class="subtitle">Statistiques du bot prédicteur (dark mode).</div>
+        </div>
+        <span class="badge">CHEICKBYPRO</span>
+      </div>
+
+      <div id="stats" class="stat-grid"></div>
+    </div>
+
+    <div class="card">
+      <div class="title">Dernières requêtes</div>
+      <div id="logs" class="result"></div>
+    </div>
+  </div>
+
+  <script>
+    async function loadAdminData() {
+      const res = await fetch(`/admin/data?key=CHEICKBYPRO`);
+      if (!res.ok) {
+        document.getElementById("stats").innerHTML = "<p>Erreur d'accès aux données admin.</p>";
+        return;
+      }
+      const data = await res.json();
+      const statsDiv = document.getElementById("stats");
+      const logsDiv = document.getElementById("logs");
+
+      statsDiv.innerHTML = `
+        <div class="stat-card">
+          <strong>Total parties</strong><br>${data.total}
+        </div>
+        <div class="stat-card">
+          <strong>Par jeu</strong><br>${Object.entries(data.by_game).map(([g, c]) => `${g}: ${c}`).join("<br>")}
+        </div>
+        <div class="stat-card">
+          <strong>Par profil</strong><br>${Object.entries(data.by_profile).map(([p, c]) => `${p}: ${c}`).join("<br>")}
+        </div>
+        <div class="stat-card">
+          <strong>Logs suivis</strong><br>${data.logs.length} derniers
+        </div>
+      `;
+
+      logsDiv.innerHTML = data.logs.map(log => `
+        <div class="result-line">
+          <span class="badge">${log.type}</span>
+          <strong>${log.game}</strong> – profil <em>${log.profile}</em>,
+          chemin <code>${log.best_path}</code>,
+          score ${log.predicted_score},
+          survie ${log.survival_chance}%
+        </div>
+      `).join("");
+    }
+
+    loadAdminData();
+    setInterval(loadAdminData, 5000);
+  </script>
+</body>
+</html>
