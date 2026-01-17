@@ -18,7 +18,8 @@ def detect_profile(message: str) -> str:
         return "aggressive"
     return "balanced"
 
-def compute_option_score(option, profile: str):
+
+def compute_option_score(option: dict, profile: str) -> float:
     survival = option["survival_chance"]
     min_s, max_s = option["score_range"]
     potential_score = (min_s + max_s) / 10.0
@@ -33,8 +34,9 @@ def compute_option_score(option, profile: str):
 
     return survival * 0.6 + potential_score * 0.3 + risk_factor * 0.1
 
+
 # --- PREDICTIONS ---
-def _predict(profile, game, options):
+def _predict(profile: str, game: str, options: List[dict]) -> dict:
     best = max(options, key=lambda o: compute_option_score(o, profile))
     score = random.randint(*best["score_range"])
     return {
@@ -43,54 +45,136 @@ def _predict(profile, game, options):
         "survival_chance": round(best["survival_chance"] * 100, 1),
         "predicted_score": score,
         "reason": best["reason"],
-        "profile": profile
+        "profile": profile,
     }
 
-def predict_wild_west(profile):
+
+def predict_wild_west(profile: str) -> dict:
     return _predict(profile, "wild_west", [
-        {"path":"left","survival_chance":0.92,"score_range":(7,10),"risk":0.2,"reason":"Chemin maîtrisé, tu évites l’embuscade principale."},
-        {"path":"right","survival_chance":0.65,"score_range":(4,9),"risk":0.6,"reason":"Plus risqué, mais parfois très rentable."},
-        {"path":"forward","survival_chance":0.4,"score_range":(2,10),"risk":0.9,"reason":"Tu fonces dans le danger, tout ou rien."}
+        {
+            "path": "left",
+            "survival_chance": 0.92,
+            "score_range": (7, 10),
+            "risk": 0.2,
+            "reason": "Chemin maîtrisé, tu évites l’embuscade principale.",
+        },
+        {
+            "path": "right",
+            "survival_chance": 0.65,
+            "score_range": (4, 9),
+            "risk": 0.6,
+            "reason": "Plus risqué, mais parfois très rentable.",
+        },
+        {
+            "path": "forward",
+            "survival_chance": 0.4,
+            "score_range": (2, 10),
+            "risk": 0.9,
+            "reason": "Tu fonces dans le danger, tout ou rien.",
+        },
     ])
 
-def predict_kamikaze(profile):
+
+def predict_kamikaze(profile: str) -> dict:
     return _predict(profile, "kamikaze", [
-        {"path":"safe_route","survival_chance":0.88,"score_range":(6,9),"risk":0.3,"reason":"Tu limites les risques tout en restant efficace."},
-        {"path":"risky_route","survival_chance":0.5,"score_range":(4,10),"risk":0.7,"reason":"Gros potentiel, mais une erreur et tout explose."},
-        {"path":"all_in","survival_chance":0.2,"score_range":(1,10),"risk":1.0,"reason":"Mode kamikaze total, réservé aux joueurs sans peur."}
+        {
+            "path": "safe_route",
+            "survival_chance": 0.88,
+            "score_range": (6, 9),
+            "risk": 0.3,
+            "reason": "Tu limites les risques tout en restant efficace.",
+        },
+        {
+            "path": "risky_route",
+            "survival_chance": 0.5,
+            "score_range": (4, 10),
+            "risk": 0.7,
+            "reason": "Gros potentiel, mais une erreur et tout explose.",
+        },
+        {
+            "path": "all_in",
+            "survival_chance": 0.2,
+            "score_range": (1, 10),
+            "risk": 1.0,
+            "reason": "Mode kamikaze total, réservé aux joueurs sans peur.",
+        },
     ])
 
-def predict_dragons_gold(profile):
+
+def predict_dragons_gold(profile: str) -> dict:
     return _predict(profile, "dragons_gold", [
-        {"path":"steal_silently","survival_chance":0.9,"score_range":(6,9),"risk":0.3,"reason":"Tu voles sans réveiller le dragon, discret et rentable."},
-        {"path":"fight_dragon","survival_chance":0.35,"score_range":(4,10),"risk":0.9,"reason":"Combat direct, très risqué mais glorieux si tu réussis."},
-        {"path":"negotiate","survival_chance":0.75,"score_range":(5,8),"risk":0.5,"reason":"Tu joues la diplomatie, bon équilibre entre risque et gain."}
+        {
+            "path": "steal_silently",
+            "survival_chance": 0.9,
+            "score_range": (6, 9),
+            "risk": 0.3,
+            "reason": "Tu voles sans réveiller le dragon, discret et rentable.",
+        },
+        {
+            "path": "fight_dragon",
+            "survival_chance": 0.35,
+            "score_range": (4, 10),
+            "risk": 0.9,
+            "reason": "Combat direct, très risqué mais glorieux si tu réussis.",
+        },
+        {
+            "path": "negotiate",
+            "survival_chance": 0.75,
+            "score_range": (5, 8),
+            "risk": 0.5,
+            "reason": "Tu joues la diplomatie, bon équilibre entre risque et gain.",
+        },
     ])
 
-def predict_royal_feast(profile):
+
+def predict_royal_feast(profile: str) -> dict:
     return _predict(profile, "royal_feast", [
-        {"path":"golden_door","survival_chance":0.89,"score_range":(7,10),"risk":0.3,"reason":"Tu choisis la voie royale, protégée et avantageuse."},
-        {"path":"secret_passage","survival_chance":0.7,"score_range":(5,9),"risk":0.5,"reason":"Chemin discret, bon compromis entre risque et récompense."},
-        {"path":"front_gate","survival_chance":0.5,"score_range":(3,9),"risk":0.7,"reason":"Tu arrives par l’entrée principale, visible mais assumé."}
+        {
+            "path": "golden_door",
+            "survival_chance": 0.89,
+            "score_range": (7, 10),
+            "risk": 0.3,
+            "reason": "Tu choisis la voie royale, protégée et avantageuse.",
+        },
+        {
+            "path": "secret_passage",
+            "survival_chance": 0.7,
+            "score_range": (5, 9),
+            "risk": 0.5,
+            "reason": "Chemin discret, bon compromis entre risque et récompense.",
+        },
+        {
+            "path": "front_gate",
+            "survival_chance": 0.5,
+            "score_range": (3, 9),
+            "risk": 0.7,
+            "reason": "Tu arrives par l’entrée principale, visible mais assumé.",
+        },
     ])
 
-def predict_game(game: str, profile: str):
+
+def predict_game(game: str, profile: str) -> dict:
     game = game.lower()
-    if game == "wild_west": return predict_wild_west(profile)
-    if game == "kamikaze": return predict_kamikaze(profile)
-    if game == "dragons_gold": return predict_dragons_gold(profile)
-    if game == "royal_feast": return predict_royal_feast(profile)
+    if game == "wild_west":
+        return predict_wild_west(profile)
+    if game == "kamikaze":
+        return predict_kamikaze(profile)
+    if game == "dragons_gold":
+        return predict_dragons_gold(profile)
+    if game == "royal_feast":
+        return predict_royal_feast(profile)
     return {
         "game": game,
         "best_path": None,
         "survival_chance": None,
         "predicted_score": None,
         "reason": "Je ne connais pas encore ce jeu.",
-        "profile": profile
+        "profile": profile,
     }
 
+
 # --- LOGS ---
-def log_game(event_type: str, game: str, profile: str, prediction: dict):
+def log_game(event_type: str, game: str, profile: str, prediction: dict) -> None:
     game_logs.append({
         "type": event_type,
         "game": prediction.get("game", game),
@@ -98,10 +182,11 @@ def log_game(event_type: str, game: str, profile: str, prediction: dict):
         "best_path": prediction.get("best_path"),
         "predicted_score": prediction.get("predicted_score"),
         "survival_chance": prediction.get("survival_chance"),
-        "reason": prediction.get("reason")
+        "reason": prediction.get("reason"),
     })
     if len(game_logs) > 200:
         game_logs.pop(0)
+
 
 # --- API ---
 @app.get("/start")
@@ -110,37 +195,56 @@ def start(game: str, profile: str = "balanced"):
     log_game("start", game, profile, prediction)
     return JSONResponse(content=prediction)
 
+
 @app.get("/action")
 def action(game: str, profile: str = "balanced"):
     prediction = predict_game(game, profile)
-    survived = prediction["survival_chance"] >= 50
+    survived = prediction["survival_chance"] is not None and prediction["survival_chance"] >= 50
     prediction["survived"] = survived
     log_game("action", game, profile, prediction)
     return JSONResponse(content=prediction)
+
 
 @app.post("/")
 async def poe_handler(request: Request):
     data = await request.json()
     message = data.get("message", "").strip()
     profile = detect_profile(message)
-    lower
-    app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="static")
+    lower = message.lower()
 
-@app.get("/", response_class=HTMLResponse)
-async def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
-    # --- STATIC & UI ---
+    if lower.startswith("start"):
+        game = lower.replace("start", "").strip().replace(" ", "_")
+        prediction = predict_game(game, profile)
+        log_game("start_poe", game, profile, prediction)
+        return JSONResponse(content=prediction)
+
+    if lower.startswith("action"):
+        game = lower.replace("action", "").strip().replace(" ", "_")
+        prediction = predict_game(game, profile)
+        survived = prediction["survival_chance"] is not None and prediction["survival_chance"] >= 50
+        prediction["survived"] = survived
+        log_game("action_poe", game, profile, prediction)
+        return JSONResponse(content=prediction)
+
+    return JSONResponse(content={
+        "message": "Commande inconnue. Exemple : start wild_west"
+    })
+
+
+# --- STATIC & UI ---
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="static")
 
+
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
 
 @app.get("/ui", response_class=HTMLResponse)
 async def ui_page(request: Request):
     return templates.TemplateResponse("ui.html", {"request": request})
+
 
 @app.get("/admin", response_class=HTMLResponse)
 async def admin_page(request: Request, key: str = Query(None)):
@@ -148,14 +252,15 @@ async def admin_page(request: Request, key: str = Query(None)):
         return HTMLResponse("<h1>Accès refusé</h1>", status_code=403)
     return templates.TemplateResponse("admin.html", {"request": request})
 
+
 @app.get("/admin/data")
 async def admin_data(key: str = Query(None)):
     if key != ADMIN_KEY:
         return JSONResponse({"error": "Clé invalide"}, status_code=403)
 
     total = len(game_logs)
-    by_game = {}
-    by_profile = {}
+    by_game: Dict[str, int] = {}
+    by_profile: Dict[str, int] = {}
 
     for log in game_logs:
         by_game[log["game"]] = by_game.get(log["game"], 0) + 1
@@ -165,39 +270,5 @@ async def admin_data(key: str = Query(None)):
         "total": total,
         "by_game": by_game,
         "by_profile": by_profile,
-        "logs": game_logs[-50:]
+        "logs": game_logs[-50:],
     })
-    # --- STATIC & UI ---
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="static")
-
-@app.get("/", response_class=HTMLResponse)
-async def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
-
-@app.get("/ui", response_class=HTMLResponse)
-async def ui_page(request: Request):
-    return templates.TemplateResponse("ui.html", {"request": request})
-
-@app.get("/admin", response_class=HTMLResponse)
-async def admin_page(request: Request, key: str = Query(None)):
-    if key != ADMIN_KEY:
-        return HTMLResponse("<h1>Accès refusé</h1>", status_code=403)
-    return templates.TemplateResponse("admin.html", {"request": request})
-    # --- STATIC & UI ---
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="static")
-
-@app.get("/", response_class=HTMLResponse)
-async def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
-
-@app.get("/ui", response_class=HTMLResponse)
-async def ui_page(request: Request):
-    return templates.TemplateResponse("ui.html", {"request": request})
-
-@app.get("/admin", response_class=HTMLResponse)
-async def admin_page(request: Request, key: str = Query(None)):
-    if key != ADMIN_KEY:
-        return HTMLResponse("<h1>Accès refusé</h1>", status_code=403)
-    return templates.TemplateResponse("admin.html", {"request": request})
