@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>co_cheickby_v1 – Interface</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="title">co_cheickby_v1</div>
+      <div class="subtitle">Bot prédicteur de chemins – mode gaming futuriste.</div>
+
+      <label for="game">Jeu</label>
+      <select id="game">
+        <option value="wild_west">Wild West</option>
+        <option value="kamikaze">Kamikaze</option>
+        <option value="dragons_gold">Dragons Gold</option>
+        <option value="royal_feast">Royal Feast</option>
+      </select>
+
+      <label for="profile">Profil de jeu</label>
+      <select id="profile">
+        <option value="balanced">Équilibré</option>
+        <option value="safe">Prudent</option>
+        <option value="aggressive">Agressif</option>
+      </select>
+
+      <div class="buttons-row">
+        <button id="startBtn">Start</button>
+        <button id="actionBtn" class="secondary">Action</button>
+      </div>
+
+      <div id="result" class="result"></div>
+    </div>
+
+    <div class="card">
+      <div class="title">Astuce</div>
+      <div class="subtitle">
+        Utilise cette interface pour tester ton bot comme un joueur.  
+        Pour l’admin : <span class="badge">/admin?key=CHEICKBYPRO</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
