@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>co_cheickby_v1 – Accueil</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="title">Bienvenue sur co_cheickby_v1</div>
+      <div class="subtitle">Choisis ton interface :</div>
+
+      <div class="buttons-row">
+        <a href="/ui">
+          <button>Interface Joueur 🎮</button>
+        </a>
+        <a href="/admin?key=CHEICKBYPRO">
+          <button class="secondary">Dashboard Admin 🧠</button>
+        </a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="subtitle">
+        Projet développé par <strong>Cheickby</strong> 🚀  
+        <br>Bot prédicteur de chemins et matchs virtuels.
+      </div>
+    </div>
+  </div>
+</body>
+</html>
