@@ -184,3 +184,20 @@ async def admin_page(request: Request, key: str = Query(None)):
     if key != ADMIN_KEY:
         return HTMLResponse("<h1>Accès refusé</h1>", status_code=403)
     return templates.TemplateResponse("admin.html", {"request": request})
+    # --- STATIC & UI ---
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="static")
+
+@app.get("/", response_class=HTMLResponse)
+async def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/ui", response_class=HTMLResponse)
+async def ui_page(request: Request):
+    return templates.TemplateResponse("ui.html", {"request": request})
+
+@app.get("/admin", response_class=HTMLResponse)
+async def admin_page(request: Request, key: str = Query(None)):
+    if key != ADMIN_KEY:
+        return HTMLResponse("<h1>Accès refusé</h1>", status_code=403)
+    return templates.TemplateResponse("admin.html", {"request": request})
