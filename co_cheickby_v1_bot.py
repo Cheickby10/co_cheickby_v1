@@ -124,3 +124,63 @@ async def poe_handler(request: Request):
     message = data.get("message", "").strip()
     profile = detect_profile(message)
     lower
+    app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="static")
+
+@app.get("/", response_class=HTMLResponse)
+async def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+    # --- STATIC & UI ---
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="static")
+
+@app.get("/", response_class=HTMLResponse)
+async def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/ui", response_class=HTMLResponse)
+async def ui_page(request: Request):
+    return templates.TemplateResponse("ui.html", {"request": request})
+
+@app.get("/admin", response_class=HTMLResponse)
+async def admin_page(request: Request, key: str = Query(None)):
+    if key != ADMIN_KEY:
+        return HTMLResponse("<h1>Accès refusé</h1>", status_code=403)
+    return templates.TemplateResponse("admin.html", {"request": request})
+
+@app.get("/admin/data")
+async def admin_data(key: str = Query(None)):
+    if key != ADMIN_KEY:
+        return JSONResponse({"error": "Clé invalide"}, status_code=403)
+
+    total = len(game_logs)
+    by_game = {}
+    by_profile = {}
+
+    for log in game_logs:
+        by_game[log["game"]] = by_game.get(log["game"], 0) + 1
+        by_profile[log["profile"]] = by_profile.get(log["profile"], 0) + 1
+
+    return JSONResponse({
+        "total": total,
+        "by_game": by_game,
+        "by_profile": by_profile,
+        "logs": game_logs[-50:]
+    })
+    # --- STATIC & UI ---
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="static")
+
+@app.get("/", response_class=HTMLResponse)
+async def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/ui", response_class=HTMLResponse)
+async def ui_page(request: Request):
+    return templates.TemplateResponse("ui.html", {"request": request})
+
+@app.get("/admin", response_class=HTMLResponse)
+async def admin_page(request: Request, key: str = Query(None)):
+    if key != ADMIN_KEY:
+        return HTMLResponse("<h1>Accès refusé</h1>", status_code=403)
+    return templates.TemplateResponse("admin.html", {"request": request})
