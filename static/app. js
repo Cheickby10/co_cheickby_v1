@@ -1,0 +1,39 @@
+async function callApi(type) {
+  const game = document.getElementById("game").value;
+  const profile = document.getElementById("profile").value;
+  const resultDiv = document.getElementById("result");
+
+  resultDiv.innerHTML = "<div class='result-line'>Analyse en cours...</div>";
+
+  try {
+    const url = `/${type}?game=${encodeURIComponent(game)}&profile=${encodeURIComponent(profile)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (type === "start") {
+      resultDiv.innerHTML = `
+        <div class="result-line"><strong>Jeu :</strong> ${data.message}</div>
+        <div class="result-line"><strong>Profil :</strong> ${data.profile}</div>
+        <div class="result-line"><strong>Chemin conseillé :</strong> ${data.best_path}</div>
+        <div class="result-line"><strong>Survie :</strong> ${data.survival_chance}</div>
+        <div class="result-line"><strong>Score prédit :</strong> ${data.predicted_score}</div>
+        <div class="result-line"><strong>Raison :</strong> ${data.reason}</div>
+      `;
+    } else {
+      resultDiv.innerHTML = `
+        <div class="result-line"><strong>Jeu :</strong> ${data.game}</div>
+        <div class="result-line"><strong>Profil :</strong> ${data.profile}</div>
+        <div class="result-line"><strong>Chemin conseillé :</strong> ${data.best_path}</div>
+        <div class="result-line"><strong>Survie :</strong> ${data.survival_chance}</div>
+        <div class="result-line"><strong>Score prédit :</strong> ${data.predicted_score}</div>
+        <div class="result-line"><strong>Survécu :</strong> ${data.survived ? "Oui" : "Non"}</div>
+        <div class="result-line"><strong>Raison :</strong> ${data.reason}</div>
+      `;
+    }
+  } catch (e) {
+    resultDiv.innerHTML = "<div class='result-line'>Erreur lors de l'appel à l'API.</div>";
+  }
+}
+
+document.getElementById("startBtn").addEventListener("click", () => callApi("start"));
+document.getElementById("actionBtn").addEventListener("click", () => callApi("action"));
